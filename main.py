@@ -56,7 +56,12 @@ for row in rows:
     targets.append((startX, startY, endX, endY))
 
 ##
+#TODO
 #Do a test train split
+
+
+
+# Neural Network model
 data = np.array(data, dtype="float32") / 255.0
 targets = np.array(targets, dtype="float32")
 
