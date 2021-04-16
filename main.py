@@ -54,19 +54,27 @@ for row in rows:
 
     data.append(image)
     targets.append((startX, startY, endX, endY))
+    filenames.append(filename)
 
 ##
-#TODO
 #Do a test train split
-
+split = train_test_split(data, targets, filenames, test_size=0.10,
+	random_state=42)
+# unpack the data split
+(trainImages, testImages) = split[:2]
+(trainTargets, testTargets) = split[2:4]
+(trainFilenames, testFilenames) = split[4:]
 
 
 # Neural Network model
 data = np.array(data, dtype="float32") / 255.0
 targets = np.array(targets, dtype="float32")
 
+trainImages = np.array(trainImages, dtype="float32") / 255.0
+trainTargets = np.array(trainTargets, dtype="float32")
+
 # load the VGG16 network, ensuring the head FC layers are left off
-vgg = VGG16(weights="imagenet", include_top=False,input_tensor=Input(shape=(512, 512, 3)))
+vgg = VGG16(weights="imagenet", include_top=False, input_tensor=Input(shape=(256, 256, 3)))
 # freeze all VGG layers so they will *not* be updated during the
 # training process
 vgg.trainable = False
@@ -90,9 +98,9 @@ print(model.summary())
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 H = model.fit(
-	data, targets,
+	trainImages, trainTargets,
 	batch_size=2,
-	epochs=5,
+	epochs=10,
 	verbose=1)
 
 ##
