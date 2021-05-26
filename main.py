@@ -99,6 +99,7 @@ print(model.summary())
 print("[INFO] training bounding box regressor...")
 H = model.fit(
 	trainImages, trainTargets,
+    validation_split=0.2,
 	batch_size=2,
 	epochs=10,
 	verbose=1)
